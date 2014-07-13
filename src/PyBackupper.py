@@ -1,15 +1,21 @@
 '''
-Created on 18.04.2014
-
-@author: Dennis
+@title           :PBBackupper.py
+@description     :
+@author          :Dennis Luensch
+@date            :2014.04.18
+@version         :1.0
+@usage           :python pyscript.py
+@notes           :
+@python_version  :3.4
 '''
+
 from PBConfigParser import ConfigParser
 from PBLogger import Logger
 from PBBackup import Backup
 
 def printCfg(pbParser):
     configs = pbParser.getConfigs()
-    print(str(len(configs)) + " gelesen!\n")
+    print(str(len(configs)) + " readed!\n")
     for config in configs:
         params = config.getProjectParamCombis()
         print("Name: " + config.getBackupName())
@@ -27,14 +33,14 @@ def main():
     pbBackup = Backup(pbLogger)
     
     if pbParser.readConfig(pbLogger):
-        print("Lesen erfolgreich")
+        print("read successfull")
         printCfg(pbParser)
         
         configs = pbParser.getConfigs()
         for config in configs:
             pbBackup.startBackup(config)
     else:
-        print("Lesen nicht erfolgreich")
+        print("reading failed")
         
     pbLogger.close()
 

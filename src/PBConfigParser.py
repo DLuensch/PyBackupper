@@ -1,20 +1,25 @@
 '''
-Created on 18.04.2014
-
-@author: Dennis
+@title           :PBConfigParser.py
+@description     :
+@author          :Dennis Luensch
+@date            :2014.04.18
+@version         :1.0
+@usage           :python pyscript.py
+@notes           :
+@python_version  :3.4
 '''
+
 import configparser
 from PBConfig import PBConfig
 from PBParamCombi import ParamCombi
 from PBLogger import Logger
-from _winapi import NULL
 
 class ConfigParser(object):
     
     def __init__(self, configFile):
         self.__file = str(configFile)
         self.__configs = []
-        self.__logger = NULL
+        self.__logger = None
         
         
     def __readProjectConfig(self, config, cfgPath):

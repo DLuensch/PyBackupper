@@ -1,8 +1,14 @@
 '''
-Created on 20.04.2014
-
-@author: Dennis
+@title           :PBLogger.py
+@description     :
+@author          :Dennis Luensch
+@date            :2014.04.18
+@version         :1.0
+@usage           :python pyscript.py
+@notes           :
+@python_version  :3.4
 '''
+
 import time
 
 class Logger(object):

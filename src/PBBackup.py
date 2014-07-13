@@ -2,11 +2,11 @@
 @title           :PBBackup.py
 @description     :
 @author          :Dennis Luensch
-@date            :20140420
+@date            :2014.04.20
 @version         :1.0
 @usage           :python pyscript.py
 @notes           :
-@python_version  :3.3  
+@python_version  :3.4
 '''
 
 from PBConfig import PBConfig
