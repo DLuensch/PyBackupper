@@ -7,12 +7,14 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2
 '''
 
 class ParamCombi(object):
     
     BACKUP_FILE = "-f"
     BACKUP_RECUSIVE = "-d"
+    BACKUP_MYSQLDB = "-sql"
 
     def __init__(self, operation, path):
         self.__operation = operation

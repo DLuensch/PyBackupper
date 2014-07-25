@@ -7,20 +7,20 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2
 '''
 
 from PBConfig import PBConfig
 from PBParamCombi import ParamCombi
 from PBLogger import Logger
-import os, shutil, time, stat
+import os, shutil, time, stat, datetime
 
 class Backup(object):
     
     def __getTimeStamp(self):
-        t = time.localtime()        
-        return  str(t.tm_year) + "." \
-                      + str(t.tm_mon).zfill(2) + "." + str(t.tm_mday).zfill(2) \
-                      + "_" + str(t.tm_hour).zfill(2) + ":" + str(t.tm_min).zfill(2) + ":" + str(t.tm_sec).zfill(2)
+        ts = time.time()
+        timestamp = datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d_%H:%M:%S')
+        return str(timestamp)
     
     def __init__(self, logger):
         self.__dstPath = ""
@@ -77,7 +77,20 @@ class Backup(object):
             if (param.getParam() == ParamCombi.BACKUP_FILE):
                 self.__backupFile(param.getPath(), config.getBackupName())
             elif (param.getParam() == ParamCombi.BACKUP_RECUSIVE):
-                self.__backupRecusive(param.getPath(), self.__dstPath, config.getBackupName())
+                folder = ""
+                dst = self.__dstPath
+                
+                # Is needed, because the base folder name is not copied
+                if param.getPath().endswith("/"):
+                    folder = os.path.basename(os.path.dirname(param.getPath()))
+                else:
+                    folder = os.path.basename(param.getPath())
+                dst = os.path.join(dst, folder)
+                
+                self.__backupRecusive(param.getPath(), dst, config.getBackupName())
+            elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
+                #TODO paste sql backup code
+                print("Backup sql db: " + param.getPath())
                 
             
             

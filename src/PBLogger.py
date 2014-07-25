@@ -7,6 +7,7 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2
 '''
 
 import time

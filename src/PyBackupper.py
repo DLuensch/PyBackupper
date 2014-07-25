@@ -7,6 +7,7 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2 
 '''
 
 from PBConfigParser import ConfigParser
@@ -21,6 +22,12 @@ def printCfg(pbParser):
         print("Name: " + config.getBackupName())
         print("savePath: " + config.getProjectSavePath())
         print("zipProject: " + str(config.getZipRule()))
+        if config.dbParamsSet():
+            print("User: " + config.getSqlUserName())
+            print("PW: " + config.getSqlUserPw())
+            print("DB Name: " + config.getSqlName())
+        else:
+            print("DB: No Settings")
         print("Params: " + str(len(params)))
         for i in range(0, len(params)):
             param = params[i]

@@ -7,6 +7,7 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2
 '''
 
 import configparser, time
@@ -22,10 +23,22 @@ class PBConfig(object):
         self.__paramCombis = []
         self.__savePath = ""
         self.__zipProject = False
-        self.__backUpType = "o"
+        self.__backUpType = "owrite"
+        self.__dbUser = ""
+        self.__dbUserPw = ""
+        self.__dbName = ""
+        self.__dbParamsSet = False
         
     def setZipRule(self, value):
         self.__zipProject = bool(value)
+        
+    def setMySqlDbParams(self, dbUser, dbUserPw, dbName):        
+        
+        if (dbUser and dbUserPw and dbName):
+            self.__dbUser = dbUser
+            self.__dbUserPw = dbUserPw
+            self.__dbName = dbName        
+            self.__dbParamsSet = True
         
     def setBackupType(self, backUpType):
         
@@ -75,4 +88,16 @@ class PBConfig(object):
             
     def getProjectParamCombis(self):
         return self.__paramCombis
+    
+    def getSqlUserName(self):
+        return self.__dbUser
+    
+    def getSqlUserPw(self):
+        return self.__dbUserPw
+    
+    def getSqlName(self):
+        return self.__dbName
+    
+    def dbParamsSet(self):
+        return self.__dbParamsSet
     

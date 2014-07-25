@@ -7,6 +7,7 @@
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
+@license         :GPL v2
 '''
 
 import configparser
@@ -40,12 +41,21 @@ class ConfigParser(object):
                     backupType = configParser["options"]["backupType"]
                     
                     if ((len(backupType) == 0) or \
-                            (backupType != config.PB_BACKUP_TYPE_OVERWRITE) or (backupType != config.PB_BACKUP_TYPE_OVERWRITE)):
+                            ((backupType != config.PB_BACKUP_TYPE_OVERWRITE) and (backupType != config.PB_BACKUP_TYPE_DATE))):
                         errorOccurred = True 
                         self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> backupType was not set or is wrong!")   
                 
+                #Read additional options and set them
                 if (not errorOccurred):
                     zipProject = configParser.getboolean("options", "zipProject") 
+                    
+                    try:
+                        dbUser = configParser.get("options", "dbUserName")
+                        dbUserPw = configParser["options"]["dbUserPW"]
+                        dbName = configParser["options"]["dbName"]                        
+                        config.setMySqlDbParams(dbUser, dbUserPw, dbName)
+                    except:
+                        self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> DB backup parameter missing: 'dbUserName' or 'dbUserPW' or 'dbName'!")
                     
                     config.setBackupSavePath(savePath)
                     config.setBackupType(backupType)
@@ -64,7 +74,8 @@ class ConfigParser(object):
                     if (len(cfgOperations) == len(cfgPaths)):
                        
                         for i in range(0, len(cfgPaths)):
-                            if ((cfgOperations[i][1] == ParamCombi.BACKUP_FILE) or (cfgOperations[i][1] == ParamCombi.BACKUP_RECUSIVE)):
+                            if ((cfgOperations[i][1] == ParamCombi.BACKUP_FILE) or (cfgOperations[i][1] == ParamCombi.BACKUP_RECUSIVE) \
+                                or (cfgOperations[i][1] == ParamCombi.BACKUP_MYSQLDB)):
                                 paramCombi = ParamCombi(cfgOperations[i][1], cfgPaths[i][1])
                                 config.insertBackupParamCombi(paramCombi)
                             else:
@@ -106,6 +117,7 @@ class ConfigParser(object):
                         self.__configs.append(config)
                     else:
                         self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Error while reading the config")
+                        errorOccurred = True
                     
             else:
                 if not isinstance(logger, Logger):
