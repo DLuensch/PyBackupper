@@ -13,7 +13,8 @@
 class ParamCombi(object):
     
     BACKUP_FILE = "-f"
-    BACKUP_RECUSIVE = "-d"
+    BACKUP_DIRECTORY = "-d" 
+    BACKUP_RECUSIVE = "-r"
     BACKUP_MYSQLDB = "-sql"
 
     def __init__(self, operation, path):

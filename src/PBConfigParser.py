@@ -75,13 +75,13 @@ class ConfigParser(object):
                        
                         for i in range(0, len(cfgPaths)):
                             if ((cfgOperations[i][1] == ParamCombi.BACKUP_FILE) or (cfgOperations[i][1] == ParamCombi.BACKUP_RECUSIVE) \
-                                or (cfgOperations[i][1] == ParamCombi.BACKUP_MYSQLDB)):
+                                or (cfgOperations[i][1] == ParamCombi.BACKUP_DIRECTORY) or (cfgOperations[i][1] == ParamCombi.BACKUP_MYSQLDB)):
                                 paramCombi = ParamCombi(cfgOperations[i][1], cfgPaths[i][1])
                                 config.insertBackupParamCombi(paramCombi)
                             else:
                                 self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + \
                                                         "] <__readProjectConfig> Wrong parameter at: [operations] -> " + \
-                                                        str(cfgOperations[i][0]) + "! Must be '-d' or '-f' but was: " + str(cfgOperations[i][1]))
+                                                        str(cfgOperations[i][0]) + "! Must be '-d', '-r' or '-f' but was: " + str(cfgOperations[i][1]))
                     else:
                         errorOccurred = True
                         self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> Could not parse [paths], [operations]! Different length!")

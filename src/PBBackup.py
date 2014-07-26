@@ -26,7 +26,7 @@ class Backup(object):
         self.__dstPath = ""
         self.__logger = logger
         
-    def __backupRecusive(self, src, dst, backupName, symlinks = False, ignore = None):
+    def __backupRecusive(self, src, dst, backupName, folderOnly = False, symlinks = False, ignore = None):
         try:
             if not os.path.exists(dst):
                 os.makedirs(dst)
@@ -38,6 +38,10 @@ class Backup(object):
             for item in lst:
                 s = os.path.join(src, item)
                 d = os.path.join(dst, item)
+                
+                if folderOnly and os.path.isdir(s):
+                    continue
+                
                 if symlinks and os.path.islink(s):
                     if os.path.lexists(d):
                         os.remove(d)
@@ -76,7 +80,9 @@ class Backup(object):
             
             if (param.getParam() == ParamCombi.BACKUP_FILE):
                 self.__backupFile(param.getPath(), config.getBackupName())
-            elif (param.getParam() == ParamCombi.BACKUP_RECUSIVE):
+                
+            elif ((param.getParam() == ParamCombi.BACKUP_RECUSIVE) \
+                    or (param.getParam() == ParamCombi.BACKUP_DIRECTORY)):                
                 folder = ""
                 dst = self.__dstPath
                 
@@ -87,7 +93,8 @@ class Backup(object):
                     folder = os.path.basename(param.getPath())
                 dst = os.path.join(dst, folder)
                 
-                self.__backupRecusive(param.getPath(), dst, config.getBackupName())
+                self.__backupRecusive(param.getPath(), dst, config.getBackupName(), \
+                                      (param.getParam() == ParamCombi.BACKUP_DIRECTORY))
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
                 #TODO paste sql backup code
                 print("Backup sql db: " + param.getPath())
