@@ -112,11 +112,11 @@ class ConfigParser(object):
             if len(configItems) > 0:
                 for backupName, configPath in configItems:
                     config = PBConfig(str(backupName))
-                    self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Start reading config")
+                    self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Start reading config", self.__logger.PB_LOGGER_INFO)
                     
                     if self.__readProjectConfig(config, configPath):
                         
-                        self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Read config successfully")
+                        self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Read config successfully", self.__logger.PB_LOGGER_INFO)
                         self.__configs.append(config)
                     else:
                         self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <readConfig> Error while reading the config")

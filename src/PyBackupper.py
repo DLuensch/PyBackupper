@@ -39,15 +39,18 @@ def main():
     pbParser = ConfigParser("./config/config.cfg")
     pbBackup = Backup(pbLogger)
     
-    if pbParser.readConfig(pbLogger):
-        print("read successfull")
-        printCfg(pbParser)
-        
-        configs = pbParser.getConfigs()
-        for config in configs:
-            pbBackup.startBackup(config)
-    else:
-        print("reading failed")
+    try:
+        if pbParser.readConfig(pbLogger):
+            print("read successfull")
+            printCfg(pbParser)
+            
+            configs = pbParser.getConfigs()
+            for config in configs:
+                pbBackup.startBackup(config)
+        else:
+            print("reading failed")
+    except:
+        pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!", pbLogger.PB_LOGGER_FATAL_ERROR)
         
     pbLogger.close()
 
