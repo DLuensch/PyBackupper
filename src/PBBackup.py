@@ -23,7 +23,7 @@ class Backup(object):
         return str(timestamp)
     
     def __init__(self, logger):
-        self.__dstPath = ""
+        self.__dstRootPath = ""
         self.__logger = logger
         
     def __backupRecusive(self, src, dst, backupName, folderOnly = False, symlinks = False, ignore = None):
@@ -60,46 +60,53 @@ class Backup(object):
             self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupRecusive> Could not backup folder!")
                 
     
-    def __backupFile(self, srcPath, backupName):        
-        try: 
-            shutil.copy2(srcPath, self.__dstPath) 
+    def __backupFile(self, srcPath, dstPath, backupName):        
+        try:             
+            if not os.path.exists(dstPath):
+                os.makedirs(dstPath)
+            
+            shutil.copy2(srcPath, dstPath) 
         except:
             self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupFile> Could not backup File!")
     
     def startBackup(self, config):
-        self.__dstPath = str(config.getProjectSavePath()) + str(config.getBackupName()) + "/"
-        os.makedirs(self.__dstPath, 0o777, True)
+        self.__dstRootPath = str(config.getProjectSavePath()) + str(config.getBackupName()) + "/"
+        os.makedirs(self.__dstRootPath, 0o777, True)
         
         if (config.getBackupType() == PBConfig.PB_BACKUP_TYPE_DATE):
-            self.__dstPath += self.__getTimeStamp() + "/"
-            os.mkdir(self.__dstPath)
+            self.__dstRootPath += self.__getTimeStamp() + "/"
+            os.mkdir(self.__dstRootPath)
         
-        params = config.getProjectParamCombis()    
+        params = config.getProjectParamCombis()  
+          
         for i in range(0, len(params)):
             param = params[i]
             
+            srcPath = ""
+            dstPath = ""
+            srcFilePath = param.getPath()
+            
+            # If the path starts with a "/", it can't be created
+            if srcFilePath.startswith("/"):
+                srcFilePath = (srcFilePath)[1:]
+            
             if (param.getParam() == ParamCombi.BACKUP_FILE):
-                self.__backupFile(param.getPath(), config.getBackupName())
+                
+                # Create the path to the file and the destination path with the subfolder
+                srcPath = os.path.join(config.getSrcRootPath(), srcFilePath)                
+                dstPath = os.path.join(self.__dstRootPath, (os.path.split(srcFilePath))[0])
+                
+                self.__backupFile(srcPath, dstPath, config.getBackupName())
                 
             elif ((param.getParam() == ParamCombi.BACKUP_RECUSIVE) \
                     or (param.getParam() == ParamCombi.BACKUP_DIRECTORY)):                
-                folder = ""
-                dst = self.__dstPath
                 
-                # Is needed, because the base folder name is not copied
-                if param.getPath().endswith("/"):
-                    folder = os.path.basename(os.path.dirname(param.getPath()))
-                else:
-                    folder = os.path.basename(param.getPath())
-                dst = os.path.join(dst, folder)
+                srcPath = os.path.join(config.getSrcRootPath(), srcFilePath) 
+                dstPath = os.path.join(self.__dstRootPath, srcFilePath)
                 
-                self.__backupRecusive(param.getPath(), dst, config.getBackupName(), \
+                self.__backupRecusive(srcPath, dstPath, config.getBackupName(), \
                                       (param.getParam() == ParamCombi.BACKUP_DIRECTORY))
+                
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
                 #TODO paste sql backup code
-                print("Backup sql db: " + param.getPath())
-                
-            
-            
-        
-        
+                print("Backup sql db: " + param.getPath())       

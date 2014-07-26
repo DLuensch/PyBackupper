@@ -10,7 +10,6 @@
 @license         :GPL v2
 '''
 
-import configparser, time
 from PBParamCombi import ParamCombi
 
 class PBConfig(object):
@@ -21,7 +20,8 @@ class PBConfig(object):
     def __init__(self, backupName):
         self.__backupName = backupName
         self.__paramCombis = []
-        self.__savePath = ""
+        self.__dstRootPath = ""
+        self.__srcRootPath = ""
         self.__zipProject = False
         self.__backUpType = "owrite"
         self.__dbUser = ""
@@ -60,7 +60,16 @@ class PBConfig(object):
         if not (savePath[-1:] == "/"): 
             fullSavePath = (savePath + "/")
             
-        self.__savePath = fullSavePath
+        self.__dstRootPath = fullSavePath
+        
+    def setSrcRootPath(self, srcRootPath):
+        
+        fullSavePath = srcRootPath
+        
+        if not (srcRootPath[-1:] == "/"): 
+            fullSavePath = (srcRootPath + "/")
+            
+        self.__srcRootPath = fullSavePath
     
     def insertBackupParamCombi(self, paramCombi):
         
@@ -84,7 +93,10 @@ class PBConfig(object):
         return self.__zipProject
     
     def getProjectSavePath(self):
-        return self.__savePath
+        return self.__dstRootPath
+    
+    def getSrcRootPath(self):
+        return self.__srcRootPath
             
     def getProjectParamCombis(self):
         return self.__paramCombis

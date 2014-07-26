@@ -31,11 +31,13 @@ class ConfigParser(object):
         if (configParser.read(cfgPath) and isinstance(config, PBConfig)):
             #[options] - Part
             try:
-                savePath = configParser["options"]["savePath"]
+                dstRootPath = configParser["options"]["dstBackupRootPath"]
+                srcRootPath = configParser["options"]["srcRootPath"]
                 
-                if (len(savePath) == 0):
+                
+                if (len(dstRootPath) == 0):
                     errorOccurred = True
-                    self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> savePath was not set!")
+                    self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> dstRootPath was not set!")
                     
                 if (not errorOccurred):                
                     backupType = configParser["options"]["backupType"]
@@ -57,7 +59,8 @@ class ConfigParser(object):
                     except:
                         self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> DB backup parameter missing: 'dbUserName' or 'dbUserPW' or 'dbName'!")
                     
-                    config.setBackupSavePath(savePath)
+                    config.setBackupSavePath(dstRootPath)
+                    config.setSrcRootPath(srcRootPath)
                     config.setBackupType(backupType)
                     config.setZipRule(zipProject)
                 
