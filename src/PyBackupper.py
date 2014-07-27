@@ -26,6 +26,7 @@ def printCfg(pbParser):
             print("User: " + config.getSqlUserName())
             print("PW: " + config.getSqlUserPw())
             print("DB Name: " + config.getSqlName())
+            print("DB Zip: " + str(config.getDBCompressRule()))
         else:
             print("DB: No Settings")
         print("Params: " + str(len(params)))

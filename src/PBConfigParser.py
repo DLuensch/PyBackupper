@@ -54,8 +54,11 @@ class ConfigParser(object):
                     try:
                         dbUser = configParser.get("options", "dbUserName")
                         dbUserPw = configParser["options"]["dbUserPW"]
-                        dbName = configParser["options"]["dbName"]                        
+                        dbName = configParser["options"]["dbName"]                                              
                         config.setMySqlDbParams(dbUser, dbUserPw, dbName)
+                                                
+                        dbCompress = configParser.getboolean("options", "dbCompress")
+                        config.setDBCompressRule(dbCompress)
                     except:
                         self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) + "] <__readProjectConfig> DB backup parameter missing: 'dbUserName' or 'dbUserPW' or 'dbName'!")
                     

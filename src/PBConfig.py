@@ -28,9 +28,13 @@ class PBConfig(object):
         self.__dbUserPw = ""
         self.__dbName = ""
         self.__dbParamsSet = False
+        self.__dbCompress = False
         
     def setZipRule(self, value):
         self.__zipProject = bool(value)
+    
+    def setDBCompressRule(self, value):
+        self.__dbCompress = bool(value)
         
     def setMySqlDbParams(self, dbUser, dbUserPw, dbName):        
         
@@ -91,6 +95,9 @@ class PBConfig(object):
     
     def getZipRule(self):
         return self.__zipProject
+    
+    def getDBCompressRule(self):
+        return self.__dbCompress
     
     def getProjectSavePath(self):
         return self.__dstRootPath

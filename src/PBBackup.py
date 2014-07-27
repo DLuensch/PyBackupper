@@ -13,7 +13,10 @@
 from PBConfig import PBConfig
 from PBParamCombi import ParamCombi
 from PBLogger import Logger
-import os, shutil, time, stat, datetime
+from subprocess import Popen, PIPE 
+import os, shutil, time, stat, datetime, zipfile
+import subprocess
+
 
 class Backup(object):
     
@@ -59,7 +62,6 @@ class Backup(object):
         except:
             self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupRecusive> Could not backup folder!")
                 
-    
     def __backupFile(self, srcPath, dstPath, backupName):        
         try:             
             if not os.path.exists(dstPath):
@@ -68,6 +70,29 @@ class Backup(object):
             shutil.copy2(srcPath, dstPath) 
         except:
             self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupFile> Could not backup File!")
+            
+    def __backupSql(self, dbName, dbUser, dbUserPw, savePath, backupName, zipDB):
+        
+        args = ['mysqldump', '-u', dbUser, '-p' + dbUserPw, '--add-drop-database', '--databases', dbName]
+        process = Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        dumpOutput = process.communicate()[0] #Discard errors
+        #dumpOutput = dbName + " " + dbUser + " " +  dbUserPw + " " +  savePath + " " +  str(zipDB)
+        #file1 = open("/home/luensel/Entwicklung/PyBackupper/Testumgebung/toBackup/file1.txt", "r")
+        
+        if zipDB:
+            try:
+                zout = zipfile.ZipFile((savePath + "/" + dbName + ".zip"), "w", zipfile.ZIP_DEFLATED)
+                zout.writestr((dbName + ".sql"), str(file1))
+                zout.close()
+            except:
+                self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at compress process!")
+        else:
+            try:
+                fWriter = open((savePath + "/" + dbName + ".sql"), "w")
+                fWriter.write(dumpOutput)
+                fWriter.close()
+            except:
+                self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at save process!")
     
     def startBackup(self, config):
         self.__dstRootPath = str(config.getProjectSavePath()) + str(config.getBackupName()) + "/"
@@ -108,5 +133,11 @@ class Backup(object):
                                       (param.getParam() == ParamCombi.BACKUP_DIRECTORY))
                 
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
-                #TODO paste sql backup code
-                print("Backup sql db: " + param.getPath())       
+               
+                savePath = os.path.join(self.__dstRootPath, "Database")
+               
+                if not os.path.isdir(savePath):
+                    os.makedirs(savePath)      
+                
+                self.__backupSql(config.getSqlName(), config.getSqlUserName(), \
+                                 config.getSqlUserPw(), savePath, config.getBackupName(), config.getDBCompressRule())      
