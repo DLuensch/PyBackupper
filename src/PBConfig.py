@@ -29,6 +29,14 @@ class PBConfig(object):
         self.__dbName = ""
         self.__dbParamsSet = False
         self.__dbCompress = False
+        self.__whiteList = []
+        self.__blackList = []
+        
+    def setWhiteList(self, list):
+        self.__whiteList = list
+    
+    def setBlackList(self, list):
+        self.__blackList = list
         
     def setZipRule(self, value):
         self.__zipProject = bool(value)
@@ -119,4 +127,10 @@ class PBConfig(object):
     
     def dbParamsSet(self):
         return self.__dbParamsSet
+    
+    def getWhiteList(self):
+        return self.__whiteList
+    
+    def getBlackList(self):
+        return self.__blackList
     

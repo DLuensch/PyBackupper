@@ -13,6 +13,7 @@
 from PBConfigParser import ConfigParser
 from PBLogger import Logger
 from PBBackup import Backup
+import sys
 
 def printCfg(pbParser):
     configs = pbParser.getConfigs()
@@ -51,7 +52,7 @@ def main():
         else:
             print("reading failed")
     except:
-        pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!", pbLogger.PB_LOGGER_FATAL_ERROR)
+        pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!" + sys.exc_info()[0], pbLogger.PB_LOGGER_FATAL_ERROR)
         
     pbLogger.close()
 

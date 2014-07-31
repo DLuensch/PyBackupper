@@ -13,9 +13,7 @@
 from PBConfig import PBConfig
 from PBParamCombi import ParamCombi
 from PBLogger import Logger
-from subprocess import Popen, PIPE 
-import os, shutil, time, stat, datetime, zipfile
-import subprocess
+import os, shutil, time, stat, datetime, zipfile, subprocess, shlex
 
 
 class Backup(object):
@@ -73,26 +71,29 @@ class Backup(object):
             
     def __backupSql(self, dbName, dbUser, dbUserPw, savePath, backupName, zipDB):
         
-        args = ['mysqldump', '-u', dbUser, '-p' + dbUserPw, '--add-drop-database', '--databases', dbName]
-        process = Popen(args, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-        dumpOutput = process.communicate()[0] #Discard errors
-        #dumpOutput = dbName + " " + dbUser + " " +  dbUserPw + " " +  savePath + " " +  str(zipDB)
-        #file1 = open("/home/luensel/Entwicklung/PyBackupper/Testumgebung/toBackup/file1.txt", "r")
-        
-        if zipDB:
-            try:
-                zout = zipfile.ZipFile((savePath + "/" + dbName + ".zip"), "w", zipfile.ZIP_DEFLATED)
-                zout.writestr((dbName + ".sql"), str(file1))
-                zout.close()
-            except:
-                self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at compress process!")
-        else:
-            try:
-                fWriter = open((savePath + "/" + dbName + ".sql"), "w")
-                fWriter.write(dumpOutput)
-                fWriter.close()
-            except:
-                self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at save process!")
+        #args = shlex.split(("mysqldump -u " + dbUser + " -p" + dbUserPw + " " + dbName))
+        args = shlex.split(("ls"))
+        try:
+            
+            with subprocess.Popen(args, stdout=subprocess.PIPE) as proc:
+                dumpOutput = proc.stdout.read()
+            
+                if zipDB:
+                    try:
+                        zout = zipfile.ZipFile((savePath + "/" + dbName + ".zip"), "w", zipfile.ZIP_DEFLATED)
+                        zout.writestr((dbName + ".sql"), dumpOutput)
+                        zout.close()
+                    except:
+                        self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at compress process!")
+                else:
+                    try:
+                        fWriter = open((savePath + "/" + dbName + ".sql"), "wb")
+                        fWriter.write(dumpOutput)
+                        fWriter.close()
+                    except:
+                        self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at save process!")
+        except:
+            self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at process call 'mysqldump'!")
     
     def startBackup(self, config):
         self.__dstRootPath = str(config.getProjectSavePath()) + str(config.getBackupName()) + "/"

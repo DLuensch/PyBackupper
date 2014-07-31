@@ -51,6 +51,9 @@ class ConfigParser(object):
                 if (not errorOccurred):
                     zipProject = configParser.getboolean("options", "zipProject") 
                     
+                    blackList = (configParser.get("options", "blackList").replace(" ", "")).split(',')
+                    whiteList = (configParser.get("options", "whiteList").replace(" ", "")).split(',')
+                    
                     try:
                         dbUser = configParser.get("options", "dbUserName")
                         dbUserPw = configParser["options"]["dbUserPW"]
@@ -66,6 +69,8 @@ class ConfigParser(object):
                     config.setSrcRootPath(srcRootPath)
                     config.setBackupType(backupType)
                     config.setZipRule(zipProject)
+                    config.setBlackList(blackList)
+                    config.setWhiteList(whiteList)
                 
             except:
                 errorOccurred = True
