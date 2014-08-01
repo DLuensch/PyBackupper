@@ -27,21 +27,40 @@ class Backup(object):
         self.__dstRootPath = ""
         self.__logger = logger
         
-    def __backupRecusive(self, src, dst, backupName, folderOnly = False, symlinks = False, ignore = None):
+    def __checkList(self, file, list):
+        found = False
+        fileExt = os.path.splitext(file)[1]
+        try:            
+            for key in list:
+                if str(fileExt) == str(key):
+                    found = True
+                    break
+        except:
+            print("Hier lief was falsch")
+        
+        return found
+    
+    # folderOnly means not recursive    
+    def __backupRecusive(self, src, dst, backupName, folderOnly = False, symlinks = False, whiteList = None, blackList = None):
         try:
             if not os.path.exists(dst):
                 os.makedirs(dst)
                 shutil.copystat(src, dst)
             lst = os.listdir(src)
-            if ignore:
-                excl = ignore(src, lst)
-                lst = [x for x in lst if x not in excl]
+            
             for item in lst:
                 s = os.path.join(src, item)
-                d = os.path.join(dst, item)
-                
+                d = os.path.join(dst, item)               
+                    
                 if folderOnly and os.path.isdir(s):
                     continue
+                
+                if not os.path.isdir(s) and whiteList:
+                    if not self.__checkList(s, whiteList):
+                        continue                    
+                elif not os.path.isdir(s) and blackList:
+                    if self.__checkList(s, blackList):
+                        continue
                 
                 if symlinks and os.path.islink(s):
                     if os.path.lexists(d):
@@ -50,11 +69,11 @@ class Backup(object):
                     try:
                         st = os.lstat(s)
                         mode = stat.S_IMODE(st.st_mode)
-                        os.lchmod(d, mode)
+                        os.chmod(d, mode)
                     except:
                         pass # lchmod not available
                 elif os.path.isdir(s):
-                    self.__backupRecusive(s, d, backupName, symlinks, ignore)
+                    self.__backupRecusive(s, d, backupName, folderOnly, symlinks, whiteList, blackList)
                 else:
                     shutil.copy2(s, d)
         except:
@@ -71,8 +90,8 @@ class Backup(object):
             
     def __backupSql(self, dbName, dbUser, dbUserPw, savePath, backupName, zipDB):
         
-        #args = shlex.split(("mysqldump -u " + dbUser + " -p" + dbUserPw + " " + dbName))
-        args = shlex.split(("ls"))
+        args = shlex.split(("mysqldump -u " + dbUser + " -p" + dbUserPw + " " + dbName))
+        
         try:
             
             with subprocess.Popen(args, stdout=subprocess.PIPE) as proc:
@@ -131,7 +150,8 @@ class Backup(object):
                 dstPath = os.path.join(self.__dstRootPath, srcFilePath)
                 
                 self.__backupRecusive(srcPath, dstPath, config.getBackupName(), \
-                                      (param.getParam() == ParamCombi.BACKUP_DIRECTORY))
+                                      (param.getParam() == ParamCombi.BACKUP_DIRECTORY), config.getCopySysLinksRule(), \
+                                                                                    config.getWhiteList(), config.getBlackList())
                 
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
                

@@ -23,6 +23,7 @@ class PBConfig(object):
         self.__dstRootPath = ""
         self.__srcRootPath = ""
         self.__zipProject = False
+        self.__copySysLinks = False
         self.__backUpType = "owrite"
         self.__dbUser = ""
         self.__dbUserPw = ""
@@ -33,16 +34,25 @@ class PBConfig(object):
         self.__blackList = []
         
     def setWhiteList(self, list):
-        self.__whiteList = list
+        if list[0] == "":
+            self.__whiteList = []
+        else:
+            self.__whiteList = list
     
     def setBlackList(self, list):
-        self.__blackList = list
-        
+        if list[0] == "":
+            self.__blackList = []
+        else:
+            self.__blackList = list
+    
     def setZipRule(self, value):
         self.__zipProject = bool(value)
     
     def setDBCompressRule(self, value):
         self.__dbCompress = bool(value)
+    
+    def setCopySysLinksRule(self, value):
+        self.__copySysLinks = bool(value)
         
     def setMySqlDbParams(self, dbUser, dbUserPw, dbName):        
         
@@ -106,6 +116,9 @@ class PBConfig(object):
     
     def getDBCompressRule(self):
         return self.__dbCompress
+    
+    def getCopySysLinksRule(self):
+        return self.__copySysLinks
     
     def getProjectSavePath(self):
         return self.__dstRootPath
