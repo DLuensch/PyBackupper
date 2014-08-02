@@ -2,8 +2,9 @@
 @title           :PBBackup.py
 @description     :
 @author          :Dennis Luensch
-@date            :2014.04.20
-@version         :1.0
+@contact         :dennis[dot]luensch[at]gmail[dot]com
+@date            :2014.04.18
+@version         :beta 1.0
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4

@@ -2,8 +2,9 @@
 @title           :PBBackupper.py
 @description     :
 @author          :Dennis Luensch
+@contact         :dennis[dot]luensch[at]gmail[dot]com
 @date            :2014.04.18
-@version         :1.0
+@version         :beta 1.0
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
@@ -15,7 +16,7 @@ from PBLogger import Logger
 from PBBackup import Backup
 import sys
 
-def printCfg(pbParser):
+def printCfg(pbParser): #TODO: add new config parameter
     configs = pbParser.getConfigs()
     print(str(len(configs)) + " readed!\n")
     for config in configs:
@@ -38,22 +39,30 @@ def printCfg(pbParser):
 
 def main():
     pbLogger = Logger()
-    pbParser = ConfigParser("./config/config.cfg")
-    pbBackup = Backup(pbLogger)
     
-    try:
-        if pbParser.readConfig(pbLogger):
-            print("read successfull")
-            printCfg(pbParser)
-            
-            configs = pbParser.getConfigs()
-            for config in configs:
-                pbBackup.startBackup(config)
-        else:
-            print("reading failed")
-    except:
-        pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!" + sys.exc_info()[0], pbLogger.PB_LOGGER_FATAL_ERROR)
+    #if len(sys.argv >= 1): #TODO: Only in beta
+    if len(sys.argv) >= 2:
+        #pbParser = ConfigParser("./config/config.cfg") #TODO: Only in beta
+        pbParser = ConfigParser(sys.argv[1])
+        pbBackup = Backup(pbLogger)
         
+        print(sys.argv[1])
+        
+        pbLogger.writeMsg("[PyBackupper] " + "<main> PyBackupper startet!", pbLogger.PB_LOGGER_INFO)
+        
+        try:
+            if pbParser.readConfig(pbLogger):
+                #printCfg(pbParser) #TODO: Only in beta
+                
+                configs = pbParser.getConfigs()
+                for config in configs:
+                    pbBackup.startBackup(config)
+            else:
+                pbLogger.writeMsg("[PyBackupper] " + "<main> Could not read config! Backup failed.", pbLogger.PB_LOGGER_INFO)
+        except:
+            pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!" + sys.exc_info()[0], pbLogger.PB_LOGGER_FATAL_ERROR)
+    else:
+        pbLogger.writeMsg("[PyBackupper] " + "<main> No config set! Call (Linux): python3 PyBackupper.py path_to_your_config/your_config.cfg", pbLogger.PB_LOGGER_FATAL_ERROR)
     pbLogger.close()
 
 if __name__ == "__main__":
