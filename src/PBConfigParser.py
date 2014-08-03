@@ -97,7 +97,7 @@ class ConfigParser(object):
                                                    + "] <__readProjectConfig> DB backup parameter missing: 'dbCompress'! Set to default ('no' compression)", Logger.PB_LOGGER_INFO)
                     except:
                         self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) \
-                                               + "] <__readProjectConfig> DB backup parameter missing: 'dbUserName' or 'dbUserPW' or 'dbName'!")
+                                               + "] <__readProjectConfig> DB backup parameter missing: 'dbUserName' or 'dbUserPW' or 'dbName'! Database backup not possible!", Logger.PB_LOGGER_INFO)
                     
                     config.setBackupSavePath(dstRootPath)
                     config.setSrcRootPath(srcRootPath)

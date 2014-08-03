@@ -156,10 +156,15 @@ class Backup(object):
                 
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
                
-                savePath = os.path.join(self.__dstRootPath, "Database")
-               
-                if not os.path.isdir(savePath):
-                    os.makedirs(savePath)      
-                
-                self.__backupSql(config.getSqlName(), config.getSqlUserName(), \
-                                 config.getSqlUserPw(), savePath, config.getBackupName(), config.getDBCompressRule())      
+                if config.dbParamsSet():
+                    savePath = os.path.join(self.__dstRootPath, "Database")
+                   
+                    if not os.path.isdir(savePath):
+                        os.makedirs(savePath)      
+                    
+                    self.__backupSql(config.getSqlName(), config.getSqlUserName(), \
+                                     config.getSqlUserPw(), savePath, config.getBackupName(), config.getDBCompressRule())   
+                else:
+                    self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) \
+                                          + "] <startBackup> Could not backup sql-database! Database parameter not set! Needed parameter in config file are: " \
+                                          + "'dbUserName', 'dbUserPW' and 'dbName'")   

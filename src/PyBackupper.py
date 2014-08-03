@@ -46,9 +46,7 @@ def main():
         pbParser = ConfigParser(sys.argv[1])
         pbBackup = Backup(pbLogger)
         
-        print(sys.argv[1])
-        
-        pbLogger.writeMsg("[PyBackupper] " + "<main> PyBackupper startet!", pbLogger.PB_LOGGER_INFO)
+        pbLogger.writeMsg("[PyBackupper] " + "<main> PyBackupper started!", pbLogger.PB_LOGGER_INFO)
         
         try:
             if pbParser.readConfig(pbLogger):
