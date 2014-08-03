@@ -3,8 +3,8 @@
 @description     :
 @author          :Dennis Luensch
 @contact         :dennis[dot]luensch[at]gmail[dot]com
-@date            :2014.04.18
-@version         :beta 1.0
+@date            :2014.08.03
+@version         :RC 1
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4

@@ -3,8 +3,8 @@
 @description     :
 @author          :Dennis Luensch
 @contact         :dennis[dot]luensch[at]gmail[dot]com
-@date            :2014.04.18
-@version         :beta 1.0
+@date            :2014.08.03
+@version         :RC 1
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
@@ -40,17 +40,18 @@ def printCfg(pbParser): #TODO: add new config parameter
 def main():
     pbLogger = Logger()
     
-    #if len(sys.argv >= 1): #TODO: Only in beta
+    #if True: #TODO: Only in RC
     if len(sys.argv) >= 2:
-        #pbParser = ConfigParser("./config/config.cfg") #TODO: Only in beta
+        #pbParser = ConfigParser("./config/config.cfg") #TODO: Only in RC
         pbParser = ConfigParser(sys.argv[1])
+        
         pbBackup = Backup(pbLogger)
         
         pbLogger.writeMsg("[PyBackupper] " + "<main> PyBackupper started!", pbLogger.PB_LOGGER_INFO)
         
         try:
             if pbParser.readConfig(pbLogger):
-                #printCfg(pbParser) #TODO: Only in beta
+                #printCfg(pbParser) #TODO: Only in RC
                 
                 configs = pbParser.getConfigs()
                 for config in configs:
