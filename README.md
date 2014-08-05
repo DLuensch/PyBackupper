@@ -3,8 +3,11 @@ PyBackupper
 
 Backup software for cyclical backup creation for Windows and Linux. Creates backups of entire folders, sql-database and individual files. Easy to use!
 
+# Version
+* RC1 (03 August 2014)
+
 # Requirements
-* Python 3.4 or later
+* Python 3.2 or later
 * Windows or Linux sytem
 
 # Excute
@@ -75,8 +78,8 @@ dstBackupRootPath = ../../../Testumgebung/PyBackupTest/
 # srcRootPath = Path to the root folder where your files for backup are.
 srcRootPath = /home/luensel/Entwicklung/PyBackupper/Testumgebung/toBackup/
 #
-# zipProject = Compress the backup. NOT IMPLEMENTED YET!
-# zipProject = no
+# zipProject = Compress the backup as a '.zip' archive.
+zipProject = no
 #
 # System links will be copied if is set to 'true'
 copySysLinks = no
