@@ -47,7 +47,7 @@ sample_backup_1 = ./config/sample_cfg.cfg
 **Sample 'project_sample_config.cfg':**
 ```
 # Useable parameter:
-# -f Copies a file, specified at [paths]
+# -f Copy a file, specified at [paths]
 # -r Copies a directory recursively, specified at [paths] 
 # -d Copies a directory not recursively, specified at [paths]
 # -sql Creates a sqldump, DB-Name specified at [paths]
