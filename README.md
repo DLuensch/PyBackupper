@@ -10,7 +10,7 @@ Backup software for cyclical backup creation for Windows and Linux. Creates back
 * Python 3.2 or later
 * Windows or Linux sytem
 
-# Excute
+# Execute
 
 At startup you need to call the 'global_config'!
 ```
