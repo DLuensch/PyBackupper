@@ -8,7 +8,7 @@ Backup software for cyclical backup creation for Windows and Linux. Creates back
 
 # Requirements
 * Python 3.2 or later
-* Windows or Linux sytem
+* Windows or Linux system
 
 # Execute
 
