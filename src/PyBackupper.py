@@ -61,7 +61,7 @@ def main():
         except:
             pbLogger.writeMsg("[PyBackupper] " + "<main> An unexpected error occurred!" + sys.exc_info()[0], pbLogger.PB_LOGGER_FATAL_ERROR)
     else:
-        pbLogger.writeMsg("[PyBackupper] " + "<main> No config set! Call (Linux): python3 PyBackupper.py path_to_your_config/your_config.cfg", pbLogger.PB_LOGGER_FATAL_ERROR)
+        pbLogger.writeMsg("[PyBackupper] " + "<main> No config set! Call (Linux): python3.X path_to_src_folder/PyBackupper.py path_to_your_config/your_config.cfg", pbLogger.PB_LOGGER_FATAL_ERROR)
     pbLogger.close()
 
 if __name__ == "__main__":

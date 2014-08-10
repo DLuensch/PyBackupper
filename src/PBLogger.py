@@ -11,7 +11,7 @@
 @license         :GPL v2
 '''
 
-import time
+import time, os
 
 class Logger(object):
     '''
@@ -31,8 +31,13 @@ class Logger(object):
                       + "_" + str(t.tm_hour).zfill(2) + ":" + str(t.tm_min).zfill(2) + ":" + str(t.tm_sec).zfill(2)
     
     def __init__(self):
-        self.__fwriter = open("log.txt", "a")
+        home = os.path.join(os.path.expanduser("~"), ".PyBackupper")
+        if not os.path.exists(home):
+            os.mkdir(home)
+            
+        self.__fwriter = open(home + "/log.txt", "a")
         self.__fwriter.write("-------------- Log: " + self.__getTimeStamp() + "\n")
+        print("You can see the log-file at: 'HOME_PATH/.PyBackupper/log.txt'. E.g. on linux: '~/.PyBackupper/log.txt'")
         
     def writeMsg(self, msg, type = PB_LOGGER_ERROR):
         wMsg = "<" + self.__getTimeStamp() + ">  <<" + type.center(11) + ">> " + str(msg)

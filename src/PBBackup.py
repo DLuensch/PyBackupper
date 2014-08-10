@@ -134,12 +134,12 @@ class Backup(object):
             self.__logger.writeMsg("[PBConfigParser] [" + str(backupName) + "] <__backupSql> Something went wrong at process call 'mysqldump'!")
     
     def startBackup(self, config):
-        self.__dstRootPath = str(config.getProjectSavePath()) + str(config.getBackupName()) + "/"
+        self.__dstRootPath = os.path.join(str(config.getProjectSavePath()), str(config.getBackupName()))
         os.makedirs(self.__dstRootPath, 0o777, True)
         zipper = None
         
         if (config.getBackupType() == PBConfig.PB_BACKUP_TYPE_DATE):
-            self.__dstRootPath += self.__getTimeStamp() + "/"
+            self.__dstRootPath = os.path.join(str(config.getProjectSavePath()), self.__getTimeStamp())
             os.mkdir(self.__dstRootPath)
         
         if config.getZipRule():
@@ -177,10 +177,14 @@ class Backup(object):
                     dstPath = os.path.join("", srcFilePath)
                 else:
                     dstPath = os.path.join(self.__dstRootPath, srcFilePath)
-                    
-                self.__backupRecusive(srcPath, dstPath, config.getBackupName(), \
+                
+                if os.path.isdir(srcPath):    
+                    self.__backupRecusive(srcPath, dstPath, config.getBackupName(), \
                                       (param.getParam() == ParamCombi.BACKUP_DIRECTORY), \
                                         config.getCopySysLinksRule(), config.getWhiteList(), config.getBlackList(), zipper)
+                else:
+                    self.__logger.writeMsg("[PBConfigParser] [" + str(config.getBackupName()) \
+                                          + "] <startBackup> Could not backup folder! Path '" + str(srcPath) +"' is no folder or does not exist!")
                 
             elif (param.getParam() == ParamCombi.BACKUP_MYSQLDB):
                
