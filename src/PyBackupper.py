@@ -40,10 +40,10 @@ def printCfg(pbParser): #TODO: add new config parameter
 def main():
     pbLogger = Logger()
     
-    #if True: #TODO: Only in RC
-    if len(sys.argv) >= 2:
-        #pbParser = ConfigParser("./config/config.cfg") #TODO: Only in RC
-        pbParser = ConfigParser(sys.argv[1])
+    if True: #TODO: Only in RC
+    #if len(sys.argv) >= 2:
+        pbParser = ConfigParser("./config/config.cfg") #TODO: Only in RC
+        #pbParser = ConfigParser(sys.argv[1])
         
         pbBackup = Backup(pbLogger)
         

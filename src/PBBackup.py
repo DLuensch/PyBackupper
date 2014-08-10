@@ -139,7 +139,7 @@ class Backup(object):
         zipper = None
         
         if (config.getBackupType() == PBConfig.PB_BACKUP_TYPE_DATE):
-            self.__dstRootPath = os.path.join(str(config.getProjectSavePath()), self.__getTimeStamp())
+            self.__dstRootPath = os.path.join(self.__dstRootPath, self.__getTimeStamp())
             os.mkdir(self.__dstRootPath)
         
         if config.getZipRule():
