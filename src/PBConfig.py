@@ -4,7 +4,7 @@
 @author          :Dennis Luensch
 @contact         :dennis[dot]luensch[at]gmail[dot]com
 @date            :2014.08.03
-@version         :RC 1
+@version         :RC 2
 @usage           :python pyscript.py
 @notes           :
 @python_version  :3.4
