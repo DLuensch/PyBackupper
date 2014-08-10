@@ -44,7 +44,7 @@ class Backup(object):
     # folderOnly means not recursive    
     def __backupRecusive(self, src, dst, backupName, folderOnly = False, symlinks = False, whiteList = None, blackList = None, zipper = None):
         try:
-            if not os.path.exists(dst):
+            if not zipper and not os.path.exists(dst):
                 os.makedirs(dst)
                 shutil.copystat(src, dst)
             lst = os.listdir(src)
